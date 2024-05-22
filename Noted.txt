@@ -11,6 +11,7 @@ kubectl apply -f postgresql-deployment.yaml
 kubectl apply -f postgresql-service.yaml
 kubectl exec -it postgresql-6889d46b98-8xh7g -- bash
 kubectl port-forward svc/postgresql-service 5433:5432 &
+kubectl port-forward --namespace default svc/postgresql-service 5433:5432 &
 export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql-service -o jsonpath="{.data.postgres-password}" | base64 -d)
 psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 < 1_create_tables.sql
 psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 < 2_seed_users.sql
@@ -27,3 +28,5 @@ set DB_PASSWORD=%POSTGRES_PASSWORD%
 set DB_HOST=127.0.0.1
 set DB_PORT=5433
 set DB_NAME=mydatabase
+
+aws eks create-addon --addon-name amazon-cloudwatch-observability --cluster-name my-cluster
