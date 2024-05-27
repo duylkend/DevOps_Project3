@@ -9,7 +9,7 @@ kubectl apply -f pvc.yaml
 kubectl apply -f pv.yaml
 kubectl apply -f postgresql-deployment.yaml
 kubectl apply -f postgresql-service.yaml
-kubectl exec -it postgresql-6889d46b98-8xh7g -- bash
+kubectl exec -it postgresql-6889d46b98-xcxdx -- bash
 kubectl port-forward svc/postgresql-service 5433:5432 &
 kubectl port-forward --namespace default svc/postgresql-service 5433:5432 &
 export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql-service -o jsonpath="{.data.postgres-password}" | base64 -d)
@@ -19,6 +19,11 @@ psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 < 3_seed_tokens.sql
 psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433
 ps aux | grep 'kubectl port-forward' | grep -v grep | awk '{print $2}' | xargs -r kill
 setx DB_USERNAME=myuser
+
+kubectl get svc
+kubectl apply -f configmap.yaml
+kubectl apply -f coworking.yaml
+
 
 http://192.168.1.17:5153/api/reports/daily_usage
 http://192.168.1.17:5153/api/reports/user_visits
