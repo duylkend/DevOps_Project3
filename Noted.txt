@@ -16,14 +16,26 @@ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql-ser
 psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 < 1_create_tables.sql
 psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 < 2_seed_users.sql
 psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433 < 3_seed_tokens.sql
-psql --host 127.0.0.1 -U myuser -d mydatabase -p 5433
+psql --host 127.0.0.1 -U myuser -d mydatabase -p 5432
 ps aux | grep 'kubectl port-forward' | grep -v grep | awk '{print $2}' | xargs -r kill
 setx DB_USERNAME=myuser
+setx POSTGRES_PASSWORD=mypassword
+select *from users;
+select* from tokens;
 
+
+kubectl get secret project3-secret -o jsonpath="deployment\secret.yaml" | base64 -d
 kubectl get svc
 kubectl apply -f configmap.yaml
 kubectl apply -f coworking.yaml
 
+
+kubectl describe pod coworking-6d6c9845d6-5blbt 
+kubectl delete pod coworking-6d6c9845d6-5blbt
+kubectl get services
+kubectl get pods
+kubectl logs coworking-6d6c9845d6-xrmr9
+kubectl delete service coworking 
 
 http://192.168.1.17:5153/api/reports/daily_usage
 http://192.168.1.17:5153/api/reports/user_visits
