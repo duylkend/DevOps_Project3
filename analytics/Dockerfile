@@ -1,14 +1,14 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
-WORKDIR /app
-
-COPY requirements.txt requirements.txt
-
-RUN pip install --upgrade pip \
-    && apt-get update \
-    && apt-get install -y libpq-dev \
-    && pip install -r requirements.txt
+WORKDIR /usr/src/app
 
 COPY . .
 
-CMD ["python", "app.py"]
+RUN apt update -y && \
+    pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 5153
+
+CMD [ "python", "./app.py" ]
