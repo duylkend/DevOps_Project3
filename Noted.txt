@@ -35,7 +35,11 @@ kubectl apply -f coworking.yaml
 
 kubectl get services
 kubectl get pods
+
+#add cloudwatch
+aws iam attach-role-policy --role-name eksctl-my-cluster-nodegroup-my-nod-NodeInstanceRole-iQj9N5LHGLqw --policy-arn arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
 aws eks create-addon --addon-name amazon-cloudwatch-observability --cluster-name my-cluster
+
 //check
 kubectl get svc
 kubectl describe svc postgresql-service
